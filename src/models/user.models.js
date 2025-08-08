@@ -42,7 +42,6 @@ const userSchema = new Schema(
         },
         refreshToken: {
             type: String,
-
         }
     },
     {
@@ -50,11 +49,12 @@ const userSchema = new Schema(
     }
 );
 
-//Decrypting password
+//Ecrypting password
+//async function(next) - Also this next is fro when we do app.use(req, res, next) this next is that next
 userSchema.pre("save", async function(next) {
     if(!this.isModified("password")) return next();
 
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
 })
 
@@ -64,6 +64,7 @@ userSchema.methods.isPasswordCorrect = async function (password){
 }
 
 
+//Generating access tokens 
 userSchema.methods.generateAccessToken = function() {
     return jwt.sign(
         {
@@ -79,6 +80,7 @@ userSchema.methods.generateAccessToken = function() {
     )
 }
 
+//Generating refresh tokens 
 userSchema.methods.generateRefreshToken = function() {
     jwt.sign(
         {
