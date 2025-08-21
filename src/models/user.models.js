@@ -52,7 +52,7 @@ const userSchema = new Schema(
 );
 
 //Ecrypting password
-//async function(next) - Also this next is fro when we do app.use(req, res, next) this next is that next
+//async function(next) - Also this next is from when we do app.use(req, res, next) this next is that next
 userSchema.pre("save", async function(next) {
     if(!this.isModified("password")) return next();
 
